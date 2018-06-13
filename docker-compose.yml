@@ -1,0 +1,22 @@
+version: '2'
+services:
+  mongo:
+    image: mongo
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+  evaluator:
+    build: .
+    image: localhost:5000/evaluation:0.1.0
+    links:
+      - mongo
+    environment:
+      ASSIGNMENT_SOLUTION: ssh://git@gitlab.stackroute.in:2222/assignments/chicago-crime-data.git
+      ASSIGNMENT_SOLUTION_REF: master
+      ASSIGNMENT_SUBMISSION: ssh://git@gitlab.stackroute.in:2222/assignments/chicago-crime-data.git
+      ASSIGNMENT_SUBMISSION_REF: master
+      MONGO_URL: mongodb://mongo/repo
+    volumes:
+      - /storage/workspaces/assignments/data:/assignments/data
+      - /storage/workspaces/evaluation:/evaluation
